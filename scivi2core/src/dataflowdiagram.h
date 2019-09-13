@@ -1,10 +1,10 @@
 #ifndef DATAFLOWDIAGRAM_H
 #define DATAFLOWDIAGRAM_H
 
+#include <QJsonObject>
 #include <QObject>
 #include <QSharedPointer>
 #include <QStringListModel>
-#include <QJsonObject>
 
 namespace scivi {
 
@@ -17,8 +17,7 @@ class NodeSocket;
 using SharedNode = QSharedPointer<Node>;
 using SharedEdge = QSharedPointer<Edge>;
 
-class DataflowDiagram : public QObject
-{
+class DataflowDiagram : public QObject {
     Q_OBJECT
 public:
     explicit DataflowDiagram(QString ontPath, QObject *parent = nullptr);
@@ -51,10 +50,10 @@ private:
     QList<SharedEdge> associatedEdges(int nodeId);
 };
 
-}
+}  // namespace diagram
 
-}
+}  // namespace scivi
 
-Q_DECLARE_METATYPE(scivi::diagram::DataflowDiagram*);
+Q_DECLARE_METATYPE(scivi::diagram::DataflowDiagram *);
 
-#endif // DATAFLOWDIAGRAM_H
+#endif  // DATAFLOWDIAGRAM_H

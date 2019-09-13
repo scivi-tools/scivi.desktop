@@ -1,27 +1,27 @@
 #include "editor.h"
 
 #include <QDebug>
+#include <QDir>
 #include <QFile>
 #include <QJsonDocument>
 #include <QUrl>
 #include <QVariantMap>
-#include <QDir>
 
-#include <datanode.h>
 #include <dataflowdiagram.h>
-#include <utils/path.h>
+#include <datanode.h>
 #include <ont/ontology.h>
+#include <utils/path.h>
 #include "palette/paletteitem.h"
 
 #include "palette/palettebuilder.h"
 
-#include "knowledge/concept.h"
-#include "io/diagramwriter.h"
-#include "knowledge/reader.h"
-#include <nodesocket.h>
-#include "nodefactory.h"
-#include "interpreter/interpreter.h"
 #include <combineddatanode.h>
+#include <nodesocket.h>
+#include "interpreter/interpreter.h"
+#include "io/diagramwriter.h"
+#include "knowledge/concept.h"
+#include "knowledge/reader.h"
+#include "nodefactory.h"
 
 using namespace scivi::knowledge;
 
@@ -31,38 +31,39 @@ Editor::Editor(QQmlEngine *engine, QObject *parent)
     : QObject(parent),
       m_paletteProxyModel(&m_knowledgeService, this),
       m_diagram(SharedDiagram(new DataflowDiagram(this))),
-      m_engine(engine)
-{
+      m_engine(engine) {
     m_paletteProxyModel.setSourceModel(&m_paletteModel);
-    QObject::connect(&m_nodeSelection, &NodeGroup::changed, this, &Editor::selectedNodesChanged);
-    QObject::connect(&m_nodeSelection, &NodeGroup::added, this, [&](NodeView *nodeView) {
-        if (nodeView != nullptr) {
-            nodeView->setSelected(true);
-        }
-    });
-    QObject::connect(&m_nodeSelection, &NodeGroup::removed, this, [&](NodeView *nodeView) {
-        if (nodeView != nullptr) {
-            nodeView->setSelected(false);
-        }
-    });
+    QObject::connect(&m_nodeSelection, &NodeGroup::changed, this,
+                     &Editor::selectedNodesChanged);
+    QObject::connect(&m_nodeSelection, &NodeGroup::added, this,
+                     [&](NodeView *nodeView) {
+                         if (nodeView != nullptr) {
+                             nodeView->setSelected(true);
+                         }
+                     });
+    QObject::connect(&m_nodeSelection, &NodeGroup::removed, this,
+                     [&](NodeView *nodeView) {
+                         if (nodeView != nullptr) {
+                             nodeView->setSelected(false);
+                         }
+                     });
     QObject::connect(this, &Editor::selectedNodesChanged, this, [&]() {
-       auto selectedNode = this->selectedNode();
-       if (selectedNode != nullptr) {
-           auto selectedNodeView = reinterpret_cast<Node*>(selectedNode)->view();
-           m_paletteProxyModel.setSelectedNode(selectedNodeView);
-       } else {
-           m_paletteProxyModel.setSelectedNode(nullptr);
-       }
+        auto selectedNode = this->selectedNode();
+        if (selectedNode != nullptr) {
+            auto selectedNodeView =
+                reinterpret_cast<Node *>(selectedNode)->view();
+            m_paletteProxyModel.setSelectedNode(selectedNodeView);
+        } else {
+            m_paletteProxyModel.setSelectedNode(nullptr);
+        }
     });
 }
 
-QObject *Editor::paletteModelProp()
-{
-    return reinterpret_cast<QObject*>(&m_paletteProxyModel);
+QObject *Editor::paletteModelProp() {
+    return reinterpret_cast<QObject *>(&m_paletteProxyModel);
 }
 
-void Editor::setupFromFile(QString fileUrl)
-{
+void Editor::setupFromFile(QString fileUrl) {
     auto ontology = Reader::readFromFile(fileUrl);
     if (ontology == nullptr) {
         qWarning("Couldn't open ontology file");
@@ -80,20 +81,22 @@ void Editor::setupFromFile(QString fileUrl)
     emit ontologyLoaded();
 }
 
-void Editor::setGraphView(diagram::GraphView *graphView)
-{
+void Editor::setGraphView(diagram::GraphView *graphView) {
     m_graphView = graphView;
     m_graphView->setDiagram(m_diagram.data());
     m_connectionHandler = QSharedPointer<ConnectionHandler>::create(graphView);
-    connect(m_connectionHandler.data(), &ConnectionHandler::confirmEdge, this, &Editor::addEdgeToDiagram);
-    connect(m_connectionHandler.data(), &ConnectionHandler::deleteEdge, this, &Editor::deleteEdgeFromDiagram);
+    connect(m_connectionHandler.data(), &ConnectionHandler::confirmEdge, this,
+            &Editor::addEdgeToDiagram);
+    connect(m_connectionHandler.data(), &ConnectionHandler::deleteEdge, this,
+            &Editor::deleteEdgeFromDiagram);
     connect(m_graphView, &GraphView::nodeClicked, this, &Editor::nodeClicked);
-    connect(m_graphView, &GraphView::spaceClicked, this, &Editor::resetSelection);
-    connect(m_graphView, &GraphView::nodeDeleteClicked, this, &Editor::deleteNode);
+    connect(m_graphView, &GraphView::spaceClicked, this,
+            &Editor::resetSelection);
+    connect(m_graphView, &GraphView::nodeDeleteClicked, this,
+            &Editor::deleteNode);
 }
 
-void Editor::exportDiagram(QString fileUrl)
-{
+void Editor::exportDiagram(QString fileUrl) {
     auto json = m_diagram->toJsonObject();
     m_diagramPath = fileUrl;
     if (writeToFile(json, fileUrl)) {
@@ -102,8 +105,7 @@ void Editor::exportDiagram(QString fileUrl)
     }
 }
 
-void Editor::importDiagramFrom(QString fileUrl)
-{
+void Editor::importDiagramFrom(QString fileUrl) {
     auto importResult = readFromFile(fileUrl, m_engine);
     if (!importResult.isNull()) {
         setupFromFile(importResult->pathToOntology());
@@ -119,61 +121,53 @@ void Editor::importDiagramFrom(QString fileUrl)
     }
 }
 
-void Editor::combineSelectedNodes(QString nodeName)
-{
+void Editor::combineSelectedNodes(QString nodeName) {
     qDebug() << "Combine selected nodes";
     auto nodeViews = m_nodeSelection.nodes();
-    QList<DataNode*> nodes;
-    for (const auto &nodeView: nodeViews) {
-        DataNode *n = dynamic_cast<DataNode*>(nodeView->node());
+    QList<DataNode *> nodes;
+    for (const auto &nodeView : nodeViews) {
+        DataNode *n = dynamic_cast<DataNode *>(nodeView->node());
         if (n == nullptr) {
             continue;
         }
         nodes.append(n);
     }
-    auto combinedNode = QSharedPointer<CombinedDataNode>::create(nodeName, nodes);
+    auto combinedNode =
+        QSharedPointer<CombinedDataNode>::create(nodeName, nodes);
     m_diagram->insertNode(combinedNode);
-    for (const auto &node: nodes) {
+    for (const auto &node : nodes) {
         node->view()->setVisible(false);
     }
 }
 
-bool Editor::isConnecting() const
-{
-    return m_connectionHandler.isNull() ? false : m_connectionHandler->isActive();
+bool Editor::isConnecting() const {
+    return m_connectionHandler.isNull() ? false
+                                        : m_connectionHandler->isActive();
 }
 
-void Editor::resetSelection()
-{
-    m_nodeSelection.clear();
+void Editor::resetSelection() { m_nodeSelection.clear(); }
+
+QObject *Editor::selection() {
+    return reinterpret_cast<QObject *>(&m_nodeSelection);
 }
 
-QObject* Editor::selection()
-{
-    return reinterpret_cast<QObject*>(&m_nodeSelection);
-}
-
-QObject *Editor::selectedNode()
-{
+QObject *Editor::selectedNode() {
     if (m_nodeSelection.isEmpty() || m_nodeSelection.isMulti()) {
         return nullptr;
     }
-    return qobject_cast<QObject*>(m_nodeSelection.at(0)->node());
+    return qobject_cast<QObject *>(m_nodeSelection.at(0)->node());
 }
 
-DataflowDiagram *Editor::diagram() const
-{
+DataflowDiagram *Editor::diagram() const {
     this->m_diagram.data()->setObjectName("Diagram");
     return this->m_diagram.data();
 }
 
-QString Editor::ontPath() const
-{
+QString Editor::ontPath() const {
     return m_diagram ? m_diagram->pathToOntology() : "";
 }
 
-void Editor::visualize(QQuickItem *container)
-{
+void Editor::visualize(QQuickItem *container) {
     if (container == nullptr) {
         qWarning() << "Container for visualization is empty";
         return;
@@ -187,17 +181,14 @@ void Editor::visualize(QQuickItem *container)
     m_interpreter->interpret(this->m_diagram.data(), container);
 }
 
-QString Editor::diagramPath() const
-{
-    return m_diagramPath;
-}
+QString Editor::diagramPath() const { return m_diagramPath; }
 
-bool Editor::paletteItemClicked(QModelIndex index, int depth)
-{
+bool Editor::paletteItemClicked(QModelIndex index, int depth) {
     if (depth == 0) return false;
     auto clickedPaletteItemId = m_paletteModel.getId(index);
     if (m_graphView != nullptr) {
-        auto node = createNode(clickedPaletteItemId, m_knowledgeService, m_typesStore);
+        auto node =
+            createNode(clickedPaletteItemId, m_knowledgeService, m_typesStore);
         m_diagram->insertNode(node);
     } else {
         qWarning() << "Graph view is null when inserting new node";
@@ -206,27 +197,19 @@ bool Editor::paletteItemClicked(QModelIndex index, int depth)
     return true;
 }
 
-void Editor::deleteNode(NodeView *view)
-{
-    m_diagram->deleteNode(view->node());
-}
+void Editor::deleteNode(NodeView *view) { m_diagram->deleteNode(view->node()); }
 
-void Editor::deleteNodeModel(Node *node)
-{
-    m_diagram->deleteNode(node);
-}
+void Editor::deleteNodeModel(Node *node) { m_diagram->deleteNode(node); }
 
-void Editor::addEdgeToDiagram(QSharedPointer<Edge> edge)
-{
+void Editor::addEdgeToDiagram(QSharedPointer<Edge> edge) {
     auto presentEdges = m_diagram->edgesTo(edge->dest());
-    for (auto &edge: presentEdges) {
+    for (auto &edge : presentEdges) {
         m_diagram->deleteEdge(edge);
     }
     m_diagram->insertEdge(edge);
 }
 
-void Editor::nodeClicked(NodeView *nodeView, int modifiers)
-{
+void Editor::nodeClicked(NodeView *nodeView, int modifiers) {
     bool withShift = static_cast<unsigned int>(modifiers) & Qt::ShiftModifier;
     bool isSelected = m_nodeSelection.isNodeSelected(nodeView);
 
@@ -240,28 +223,24 @@ void Editor::nodeClicked(NodeView *nodeView, int modifiers)
     }
 }
 
-void Editor::deselectNode(NodeView *nodeView)
-{
+void Editor::deselectNode(NodeView *nodeView) {
     m_nodeSelection.remove(nodeView);
 }
 
-void Editor::deleteEdgeFromDiagram(QSharedPointer<Edge> edge)
-{
+void Editor::deleteEdgeFromDiagram(QSharedPointer<Edge> edge) {
     m_diagram->deleteEdge(edge);
 }
 
-void Editor::buildPalette()
-{
+void Editor::buildPalette() {
     auto rootConcept = m_knowledgeService.conceptByName("Root");
     auto rootConcepts = m_knowledgeService.flatChildrenOf(rootConcept);
     PaletteBuilder paletteBuilder(&m_knowledgeService);
     auto paletteConcepts = paletteBuilder.fromConcepts(rootConcepts);
     m_paletteModel.setupModel(paletteConcepts);
-    for (auto p: paletteConcepts) {
+    for (auto p : paletteConcepts) {
         delete p;
     }
     emit this->paletteModelChanged();
 }
 
-
-}
+}  // namespace scivi

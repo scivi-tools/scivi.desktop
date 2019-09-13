@@ -4,11 +4,12 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QSharedPointer>
-#include "pluginmanager.h"
 #include "editor/editor.h"
+#include "pluginmanager.h"
 #include "settings.h"
 
-#if defined Q_OS_BLACKBERRY || defined Q_OS_ANDROID || defined Q_OS_IOS || defined Q_OS_WP
+#if defined Q_OS_BLACKBERRY || defined Q_OS_ANDROID || defined Q_OS_IOS || \
+    defined Q_OS_WP
 #define Q_OS_MOBILE
 #else
 #define Q_OS_DESKTOP
@@ -19,11 +20,11 @@
 
 namespace scivi {
 
-class SciViApplication: public QObject
-{
+class SciViApplication : public QObject {
 public:
     SciViApplication(QQmlApplicationEngine &engine);
-    void initialize(Settings &settings, QApplication &app, QQmlApplicationEngine &engine);
+    void initialize(Settings &settings, QApplication &app,
+                    QQmlApplicationEngine &engine);
     int run(QApplication &app);
 
 private:
@@ -31,6 +32,6 @@ private:
     QSharedPointer<PluginManager> m_pluginManager;
 };
 
-}
+}  // namespace scivi
 
-#endif // SCIVIAPPLICATION_H
+#endif  // SCIVIAPPLICATION_H

@@ -1,13 +1,12 @@
-#include "precompiled_header.h"
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include "precompiled_header.h"
 
 #include "sciviapplication.h"
-#include "statusbarlogger.h"
 #include "settings.h"
+#include "statusbarlogger.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication qtApp(argc, argv);
     qInstallMessageHandler(StatusBarLogger::messageHandler);

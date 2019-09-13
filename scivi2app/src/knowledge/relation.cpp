@@ -4,13 +4,9 @@ namespace scivi {
 
 namespace knowledge {
 
-Relation::Relation()
-{
+Relation::Relation() {}
 
-}
-
-Relation::Type Relation::valueOf(QString value)
-{
+Relation::Type Relation::valueOf(QString value) {
     auto val = Relation::Type::UNKNOWN;
     if (value == "is_a")
         val = IS_A;
@@ -31,8 +27,8 @@ Relation::Type Relation::valueOf(QString value)
     return val;
 }
 
-Relation *Relation::build(int id, QString name, int sourceNodeId, int destinationNodeId)
-{
+Relation *Relation::build(int id, QString name, int sourceNodeId,
+                          int destinationNodeId) {
     auto newRelation = new Relation();
     newRelation->m_id = id;
     newRelation->m_sourceNodeId = sourceNodeId;
@@ -41,25 +37,13 @@ Relation *Relation::build(int id, QString name, int sourceNodeId, int destinatio
     return newRelation;
 }
 
-int Relation::id() const
-{
-    return m_id;
-}
+int Relation::id() const { return m_id; }
 
-Relation::Type Relation::type() const
-{
-    return m_type;
-}
+Relation::Type Relation::type() const { return m_type; }
 
-int Relation::sourceNodeId() const
-{
-    return m_sourceNodeId;
-}
+int Relation::sourceNodeId() const { return m_sourceNodeId; }
 
-int Relation::destinationNodeId() const
-{
-    return m_destinationNodeId;
-}
+int Relation::destinationNodeId() const { return m_destinationNodeId; }
 
-}
-}
+}  // namespace knowledge
+}  // namespace scivi

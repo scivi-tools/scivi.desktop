@@ -1,8 +1,8 @@
 #ifndef EDGEVIEW_H
 #define EDGEVIEW_H
 
-#include <QQuickItem>
 #include <QPointer>
+#include <QQuickItem>
 
 #include "./edge.h"
 
@@ -19,10 +19,9 @@ struct EdgePosition {
     QPointF control2;
 };
 
-class EdgeView : public QQuickItem
-{
+class EdgeView : public QQuickItem {
     Q_OBJECT
-    Q_PROPERTY(Edge* edge READ edge CONSTANT FINAL)
+    Q_PROPERTY(Edge *edge READ edge CONSTANT FINAL)
     Q_PROPERTY(QPointF srcPoint READ srcPoint NOTIFY srcPointChanged)
     Q_PROPERTY(QPointF destPoint READ destPoint NOTIFY destPointChanged)
     Q_PROPERTY(QPointF c1 READ c1 NOTIFY controlPointsChanged)
@@ -60,11 +59,11 @@ public slots:
     void updatePosition();
 
 private:
-    QPointer<Edge> m_edge {nullptr};
+    QPointer<Edge> m_edge{nullptr};
     NodeView *m_srcNode;
-    QQuickItem *m_srcSocket {nullptr};
+    QQuickItem *m_srcSocket{nullptr};
     NodeView *m_destNode;
-    QQuickItem *m_destSocket {nullptr };
+    QQuickItem *m_destSocket{nullptr};
     GraphView *m_graphView;
     EdgePosition m_position;
 
@@ -73,9 +72,9 @@ private:
     void updateControlPoints();
 };
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi
 
 QML_DECLARE_TYPE(scivi::diagram::EdgeView)
 
-#endif // EDGEVIEW_H
+#endif  // EDGEVIEW_H

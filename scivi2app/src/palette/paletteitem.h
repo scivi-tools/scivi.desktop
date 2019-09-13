@@ -1,15 +1,14 @@
 #ifndef PALETTEITEM_H
 #define PALETTEITEM_H
 
-#include <QString>
 #include <QList>
+#include <QString>
 
 namespace scivi {
 
 namespace palette {
 
-class PaletteItem
-{
+class PaletteItem {
 public:
     explicit PaletteItem(int id, QString name, PaletteItem *parent = nullptr);
     ~PaletteItem();
@@ -20,7 +19,7 @@ public:
     void appendChild(PaletteItem *child);
 
     PaletteItem *child(int row);
-    QList<PaletteItem*> children();
+    QList<PaletteItem *> children();
     int childCount() const;
     int row() const;
     PaletteItem *parentItem();
@@ -28,11 +27,11 @@ public:
 private:
     int m_itemId;
     QString m_itemName;
-    QList<PaletteItem*> m_childItems;
+    QList<PaletteItem *> m_childItems;
     PaletteItem *m_parentItem;
 };
 
-}
-}
+}  // namespace palette
+}  // namespace scivi
 
-#endif // PALETTEITEM_H
+#endif  // PALETTEITEM_H

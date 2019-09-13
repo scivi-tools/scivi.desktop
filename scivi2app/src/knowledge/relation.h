@@ -1,15 +1,14 @@
 #ifndef RELATION_H
 #define RELATION_H
 
-#include <QString>
 #include <QMap>
+#include <QString>
 
 namespace scivi {
 
 namespace knowledge {
 
-class Relation
-{
+class Relation {
 public:
     enum Type {
         IS_A,
@@ -25,7 +24,8 @@ public:
 
     static Type valueOf(QString value);
 
-    static Relation *build(int id, QString name, int sourceNodeId, int destinationNodeId);
+    static Relation *build(int id, QString name, int sourceNodeId,
+                           int destinationNodeId);
 
     int id() const;
     Type type() const;
@@ -42,7 +42,7 @@ private:
     Relation();
 };
 
-}
-}
+}  // namespace knowledge
+}  // namespace scivi
 
-#endif // RELATION_H
+#endif  // RELATION_H

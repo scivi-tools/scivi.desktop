@@ -12,7 +12,7 @@ public:
     virtual void render(QQuickItem *container) = 0;
 };
 
-}
-}
+}  // namespace filters
+}  // namespace scivi
 
-#endif // VISUAL_H
+#endif  // VISUAL_H

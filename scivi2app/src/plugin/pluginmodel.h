@@ -1,24 +1,23 @@
 #ifndef PLUGINMODEL_H
 #define PLUGINMODEL_H
 
-#include <QObject>
 #include <QAbstractListModel>
+#include <QObject>
 
 namespace scivi {
 
 class Plugin;
 
-class PluginModel : public QAbstractListModel
-{
+class PluginModel : public QAbstractListModel {
     Q_OBJECT
 public:
     explicit PluginModel(QObject *parent = nullptr);
     ~PluginModel() override;
 
-    void setPluginList(QList<Plugin*> plugins);
-    QList<Plugin*> plugins() const;
-    void addPlugin(Plugin* plugin);
-    Plugin* findByName(QString name);
+    void setPluginList(QList<Plugin *> plugins);
+    QList<Plugin *> plugins() const;
+    void addPlugin(Plugin *plugin);
+    Plugin *findByName(QString name);
 
 public slots:
 
@@ -28,9 +27,9 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
 private:
-    QList<Plugin*> m_plugins;
+    QList<Plugin *> m_plugins;
 };
 
-}
+}  // namespace scivi
 
-#endif // PLUGINMODEL_H
+#endif  // PLUGINMODEL_H

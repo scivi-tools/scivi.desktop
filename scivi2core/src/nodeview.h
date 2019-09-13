@@ -1,8 +1,8 @@
 #ifndef NODEVIEW_H
 #define NODEVIEW_H
 
-#include <QQuickItem>
 #include <QPointer>
+#include <QQuickItem>
 #include "./node.h"
 
 namespace scivi {
@@ -10,11 +10,11 @@ namespace diagram {
 
 QPointF calcSocketCenter(QQuickItem *socketView);
 
-class NodeView : public QQuickItem
-{
+class NodeView : public QQuickItem {
     Q_OBJECT
-    Q_PROPERTY(Node* node READ node CONSTANT FINAL)
-    Q_PROPERTY(bool isSelected READ isSelected WRITE setSelected NOTIFY selectedChanged)
+    Q_PROPERTY(Node *node READ node CONSTANT FINAL)
+    Q_PROPERTY(bool isSelected READ isSelected WRITE setSelected NOTIFY
+                   selectedChanged)
 public:
     explicit NodeView(QQuickItem *parent = nullptr);
     Node *node();
@@ -29,8 +29,10 @@ public:
 
 signals:
     void bodyClicked(NodeView *view, int modifiers);
-    void inputClicked(NodeView *view, QQuickItem *socketView, NodeSocket *socket);
-    void outputClicked(NodeView *view, QQuickItem *socketView, NodeSocket *socket);
+    void inputClicked(NodeView *view, QQuickItem *socketView,
+                      NodeSocket *socket);
+    void outputClicked(NodeView *view, QQuickItem *socketView,
+                       NodeSocket *socket);
     void inputEntered(QQuickItem *socketView);
     void inputExited(QQuickItem *socketView);
     void outputEntered(QQuickItem *socketView);
@@ -39,15 +41,15 @@ signals:
     void selectedChanged(bool);
 
 private:
-    QPointer<Node> m_node {nullptr};
+    QPointer<Node> m_node{nullptr};
     bool m_isSelected = false;
     QList<QPointer<QQuickItem>> m_inputSockets;
     QList<QPointer<QQuickItem>> m_outputSockets;
 };
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi
 
 QML_DECLARE_TYPE(scivi::diagram::NodeView)
 
-#endif // NODEVIEW_H
+#endif  // NODEVIEW_H

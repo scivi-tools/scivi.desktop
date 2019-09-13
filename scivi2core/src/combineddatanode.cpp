@@ -6,27 +6,28 @@
 namespace scivi {
 namespace diagram {
 
-CombinedDataNode::CombinedDataNode(QString name, QList<scivi::diagram::DataNode *> nodes, QObject *parent)
-    : DataNode(), m_nodes(nodes)
-{
+CombinedDataNode::CombinedDataNode(QString name,
+                                   QList<scivi::diagram::DataNode *> nodes,
+                                   QObject *parent)
+    : DataNode(), m_nodes(nodes) {
     m_name = name;
     QList<SharedSetting> combinedSettings;
     QList<SharedNodeSocket> combinedInputs;
     QList<SharedNodeSocket> combinedOutputs;
     QSet<int> nodeIdSet;
-    for (const auto &node: nodes) {
+    for (const auto &node : nodes) {
         nodeIdSet.insert(node->id());
     }
-    for (const auto &node: nodes) {
+    for (const auto &node : nodes) {
         combinedSettings.append(node->settings());
-        for (const auto &input: node->inputs()) {
+        for (const auto &input : node->inputs()) {
             auto i = SharedNodeSocket::create(*input.data(), this);
             if (!input->isJoined()) {
                 combinedInputs.append(i);
             } else {
                 auto connectedEdges = input->joinedEdges();
                 bool connectedToNodeSet = true;
-                for (const auto &edge: connectedEdges) {
+                for (const auto &edge : connectedEdges) {
                     const auto srcId = edge->src()->node()->id();
                     if (!nodeIdSet.contains(srcId)) {
                         connectedToNodeSet = false;
@@ -43,14 +44,14 @@ CombinedDataNode::CombinedDataNode(QString name, QList<scivi::diagram::DataNode 
                 }
             }
         }
-        for (const auto &output: node->outputs()) {
+        for (const auto &output : node->outputs()) {
             auto o = SharedNodeSocket::create(*output.data(), this);
             if (!output->isJoined()) {
                 combinedOutputs.append(o);
             } else {
                 auto connectedEdges = output->joinedEdges();
                 bool connectedToNodeSet = true;
-                for (const auto &edge: connectedEdges) {
+                for (const auto &edge : connectedEdges) {
                     const auto destId = edge->dest()->node()->id();
                     if (!nodeIdSet.contains(destId)) {
                         connectedToNodeSet = false;
@@ -73,5 +74,5 @@ CombinedDataNode::CombinedDataNode(QString name, QList<scivi::diagram::DataNode 
     setOutputs(combinedOutputs);
 }
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi

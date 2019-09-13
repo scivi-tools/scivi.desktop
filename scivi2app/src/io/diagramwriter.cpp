@@ -1,25 +1,23 @@
 #include "diagramwriter.h"
 
-#include <QFile>
+#include <utils/path.h>
 #include <QDebug>
+#include <QFile>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
 #include <QStandardPaths>
-#include "node.h"
-#include "edge.h"
-#include "datanode.h"
 #include "dataflowdiagram.h"
+#include "datanode.h"
+#include "edge.h"
 #include "editor/nodefactory.h"
-#include <utils/path.h>
 #include "knowledge/knowledgeservice.h"
-
+#include "node.h"
 
 namespace scivi {
 namespace diagram {
 
-SharedDiagram readFromFile(const QString &filepath, QQmlEngine *engine)
-{
+SharedDiagram readFromFile(const QString &filepath, QQmlEngine *engine) {
     auto fixedPath = PathUtils::removeSchema(filepath);
     QFile file(fixedPath);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -36,11 +34,12 @@ SharedDiagram readFromFile(const QString &filepath, QQmlEngine *engine)
     QJsonArray nodesArray = rootObject["nodes"].toArray();
     QJsonArray linksArray = rootObject["links"].toArray();
     QList<QSharedPointer<Node>> nodes;
-    foreach(const auto &jsonNode, nodesArray) {
+    foreach (const auto &jsonNode, nodesArray) {
         int nodeConceptId = jsonNode["id"].toString().toInt();
         int nodeX = jsonNode["x"].toInt();
         int nodeY = jsonNode["y"].toInt();
-        auto node = scivi::diagram::createNode(nodeConceptId, knowledgeService, typesStore);
+        auto node = scivi::diagram::createNode(nodeConceptId, knowledgeService,
+                                               typesStore);
         QJsonObject settingsObject = jsonNode["settings"].toObject();
         foreach (const auto &settingsKey, settingsObject.keys()) {
             auto id = settingsKey.toInt();
@@ -52,7 +51,7 @@ SharedDiagram readFromFile(const QString &filepath, QQmlEngine *engine)
         nodes << node;
     }
     QList<QSharedPointer<Edge>> edges;
-    foreach(auto jsonEdge, linksArray) {
+    foreach (auto jsonEdge, linksArray) {
         int srcNodeIndex = jsonEdge["node_from"].toInt();
         int srcSocketId = jsonEdge["socket_from"].toString().toInt();
         int destNodeIndex = jsonEdge["node_to"].toInt();
@@ -66,10 +65,10 @@ SharedDiagram readFromFile(const QString &filepath, QQmlEngine *engine)
         }
         edges << edge;
     }
-    for (auto &node: nodes) {
+    for (auto &node : nodes) {
         diagram->insertNode(node);
     }
-    for (auto &edge: edges) {
+    for (auto &edge : edges) {
         diagram->insertEdge(edge);
     }
     return diagram;
@@ -80,11 +79,12 @@ bool writeToFile(QJsonObject &obj, QString &filename) {
     return writeToFile(doc, filename);
 }
 
-bool writeToFile(QJsonDocument &doc, QString &filename)
-{
+bool writeToFile(QJsonDocument &doc, QString &filename) {
     filename = PathUtils::removeSchema(filename);
 #ifdef Q_OS_ANDROID
-    filename = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation)[0] + "/" + filename;
+    filename =
+        QStandardPaths::standardLocations(QStandardPaths::DownloadLocation)[0] +
+        "/" + filename;
 #endif
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
@@ -95,5 +95,5 @@ bool writeToFile(QJsonDocument &doc, QString &filename)
     return true;
 }
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi

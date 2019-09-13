@@ -3,22 +3,20 @@
 #include <QDateTime>
 #include <QJsonDocument>
 
-StatusBarLogger::StatusBarLogger(): QObject()
-{
-}
+StatusBarLogger::StatusBarLogger() : QObject() {}
 
 QString msgTypeToString(QtMsgType type) {
     switch (type) {
-    case QtMsgType::QtInfoMsg:
-        return "info";
-    case QtMsgType::QtDebugMsg:
-        return "debug";
-    case QtMsgType::QtFatalMsg:
-        return "fatal";
-    case QtMsgType::QtWarningMsg:
-        return "warning";
-    case QtMsgType::QtCriticalMsg:
-        return "critical";
+        case QtMsgType::QtInfoMsg:
+            return "info";
+        case QtMsgType::QtDebugMsg:
+            return "debug";
+        case QtMsgType::QtFatalMsg:
+            return "fatal";
+        case QtMsgType::QtWarningMsg:
+            return "warning";
+        case QtMsgType::QtCriticalMsg:
+            return "critical";
     }
 }
 
@@ -36,8 +34,9 @@ struct LogEntry {
     }
 };
 
-void StatusBarLogger::messageHandler(QtMsgType type, const QMessageLogContext &ctx, const QString &msg)
-{
+void StatusBarLogger::messageHandler(QtMsgType type,
+                                     const QMessageLogContext &ctx,
+                                     const QString &msg) {
     Q_UNUSED(ctx);
     LogEntry entry;
     entry.msg = msg;
@@ -45,27 +44,31 @@ void StatusBarLogger::messageHandler(QtMsgType type, const QMessageLogContext &c
     entry.lvl = type;
 
     QJsonObject obj;
-    FILE* stream { nullptr };
+    FILE *stream{nullptr};
     bool show = false;
     switch (type) {
-    case QtMsgType::QtWarningMsg:
-        stream = stderr;
-        break;
-    case QtMsgType::QtCriticalMsg:
-    case QtMsgType::QtFatalMsg:
-        stream = stderr;
-        show = true;
-        break;
-    case QtMsgType::QtDebugMsg:
-        stream = stdout;
-        break;
-    case QtMsgType::QtInfoMsg:
-        stream = stdout;
-        show = true;
-        break;
+        case QtMsgType::QtWarningMsg:
+            stream = stderr;
+            break;
+        case QtMsgType::QtCriticalMsg:
+        case QtMsgType::QtFatalMsg:
+            stream = stderr;
+            show = true;
+            break;
+        case QtMsgType::QtDebugMsg:
+            stream = stdout;
+            break;
+        case QtMsgType::QtInfoMsg:
+            stream = stdout;
+            show = true;
+            break;
     }
 #ifdef QT_DEBUG
-    fprintf(stream, "%s\n", entry.toJson().toJson(QJsonDocument::JsonFormat::Compact).toStdString().c_str());
+    fprintf(stream, "%s\n",
+            entry.toJson()
+                .toJson(QJsonDocument::JsonFormat::Compact)
+                .toStdString()
+                .c_str());
     fflush(stream);
 #endif
     if (show) {

@@ -1,8 +1,8 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QQuickItem>
 
 #include <filterfactory.h>
@@ -14,8 +14,7 @@ namespace diagram {
 
 class DataflowDiagram;
 
-class Interpreter: public QObject
-{
+class Interpreter : public QObject {
     Q_OBJECT
 public:
     explicit Interpreter(QObject *parent = nullptr);
@@ -23,11 +22,12 @@ public:
     void interpret(DataflowDiagram *diagram, QQuickItem *container);
 signals:
     void interpretationStarted();
+
 private:
     QMap<int, scivi::filters::FilterPtr> m_implementations;
 };
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi
 
-#endif // INTERPRETER_H
+#endif  // INTERPRETER_H

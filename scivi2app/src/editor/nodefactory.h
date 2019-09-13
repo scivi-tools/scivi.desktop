@@ -1,11 +1,11 @@
 #ifndef NODE_FACTORY_H
 #define NODE_FACTORY_H
 
-#include <QSharedPointer>
+#include <QColor>
 #include <QList>
 #include <QMap>
 #include <QRgb>
-#include <QColor>
+#include <QSharedPointer>
 
 #include "datanode.h"
 #include "knowledge/concept.h"
@@ -18,10 +18,12 @@ namespace diagram {
 
 using SharedNodeSocket = QSharedPointer<NodeSocket>;
 
-QSharedPointer<diagram::DataNode> createNode(int conceptId, knowledge::KnowledgeService &service, TypesStore &typesStore);
+QSharedPointer<diagram::DataNode> createNode(
+    int conceptId, knowledge::KnowledgeService &service,
+    TypesStore &typesStore);
 
-}
+}  // namespace diagram
 
-}
+}  // namespace scivi
 
 #endif

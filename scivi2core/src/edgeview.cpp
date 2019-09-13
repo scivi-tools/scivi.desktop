@@ -1,50 +1,32 @@
 #include "edgeview.h"
+#include "./edge.h"
 #include "./graphview.h"
 #include "./nodesocket.h"
-#include "./edge.h"
 
 namespace scivi {
 namespace diagram {
 
-EdgeView::EdgeView(QQuickItem *parent): QQuickItem(parent)
-{
+EdgeView::EdgeView(QQuickItem *parent) : QQuickItem(parent) {}
 
-}
+Edge *EdgeView::edge() { return m_edge.data(); }
 
-Edge *EdgeView::edge()
-{
-    return m_edge.data();
-}
+void EdgeView::setEdge(Edge *edge) { m_edge = edge; }
 
-void EdgeView::setEdge(Edge *edge)
-{
-    m_edge = edge;
-}
+void EdgeView::setGraph(GraphView *graphView) { m_graphView = graphView; }
 
-void EdgeView::setGraph(GraphView *graphView)
-{
-    m_graphView = graphView;
-}
-
-void EdgeView::setSource(NodeView *node, QQuickItem *socket)
-{
+void EdgeView::setSource(NodeView *node, QQuickItem *socket) {
     m_srcNode = node;
     m_srcSocket = socket;
 }
 
-void EdgeView::setDestination(NodeView *node, QQuickItem *socket)
-{
+void EdgeView::setDestination(NodeView *node, QQuickItem *socket) {
     m_destNode = node;
     m_destSocket = socket;
 }
 
-QPointF EdgeView::srcPoint()
-{
-    return m_position.start;
-}
+QPointF EdgeView::srcPoint() { return m_position.start; }
 
-void EdgeView::setSrcPoint(QPointF point)
-{
+void EdgeView::setSrcPoint(QPointF point) {
     if (m_position.start != point) {
         m_position.start = point;
         updateControlPoints();
@@ -52,18 +34,13 @@ void EdgeView::setSrcPoint(QPointF point)
     }
 }
 
-void EdgeView::setSrcPointGlobal(QPointF point)
-{
+void EdgeView::setSrcPointGlobal(QPointF point) {
     setSrcPoint(m_graphView->mapFromGlobal(point));
 }
 
-QPointF EdgeView::destPoint()
-{
-    return m_position.end;
-}
+QPointF EdgeView::destPoint() { return m_position.end; }
 
-void EdgeView::setDestPoint(QPointF point)
-{
+void EdgeView::setDestPoint(QPointF point) {
     if (m_position.end != point) {
         m_position.end = point;
         updateControlPoints();
@@ -71,34 +48,21 @@ void EdgeView::setDestPoint(QPointF point)
     }
 }
 
-void EdgeView::setDestPointGlobal(QPointF point)
-{
+void EdgeView::setDestPointGlobal(QPointF point) {
     setDestPoint(m_graphView->mapFromGlobal(point));
 }
 
-QPointF EdgeView::c1()
-{
-    return m_position.control1;
-}
+QPointF EdgeView::c1() { return m_position.control1; }
 
-QPointF EdgeView::c2()
-{
-    return m_position.control2;
-}
+QPointF EdgeView::c2() { return m_position.control2; }
 
-void EdgeView::switchToPortalView(int number)
-{
-    edge()->setNumber(number);
-}
+void EdgeView::switchToPortalView(int number) { edge()->setNumber(number); }
 
-void EdgeView::switchToNormalView()
-{
-    edge()->setNumber(-1);
-}
+void EdgeView::switchToNormalView() { edge()->setNumber(-1); }
 
-void connectSockets(QQuickItem *srcSocket, QQuickItem *destSocket, NodeView *srcNodeView,
-                  NodeView *destNodeView, EdgeView *edgeView)
-{
+void connectSockets(QQuickItem *srcSocket, QQuickItem *destSocket,
+                    NodeView *srcNodeView, NodeView *destNodeView,
+                    EdgeView *edgeView) {
     Q_ASSERT(srcSocket != nullptr);
     Q_ASSERT(destSocket != nullptr);
     Q_ASSERT(srcNodeView != nullptr);
@@ -106,13 +70,18 @@ void connectSockets(QQuickItem *srcSocket, QQuickItem *destSocket, NodeView *src
     Q_ASSERT(edgeView != nullptr);
     edgeView->setSource(srcNodeView, srcSocket);
     edgeView->setDestination(destNodeView, destSocket);
-    auto updatePositionSlot = edgeView->metaObject()->method(edgeView->metaObject()->indexOfSlot("updatePosition()"));
+    auto updatePositionSlot = edgeView->metaObject()->method(
+        edgeView->metaObject()->indexOfSlot("updatePosition()"));
     auto metaSourceNodeView = srcNodeView->metaObject();
-    auto srcNodeX = metaSourceNodeView->property(metaSourceNodeView->indexOfProperty("x"));
-    auto srcNodeY = metaSourceNodeView->property(metaSourceNodeView->indexOfProperty("y"));
+    auto srcNodeX =
+        metaSourceNodeView->property(metaSourceNodeView->indexOfProperty("x"));
+    auto srcNodeY =
+        metaSourceNodeView->property(metaSourceNodeView->indexOfProperty("y"));
     auto metaDestinationNodeView = destNodeView->metaObject();
-    auto destNodeX = metaDestinationNodeView->property(metaDestinationNodeView->indexOfProperty("x"));
-    auto destNodeY = metaDestinationNodeView->property(metaDestinationNodeView->indexOfProperty("y"));
+    auto destNodeX = metaDestinationNodeView->property(
+        metaDestinationNodeView->indexOfProperty("x"));
+    auto destNodeY = metaDestinationNodeView->property(
+        metaDestinationNodeView->indexOfProperty("y"));
     if (!destNodeX.isValid() || !destNodeX.hasNotifySignal()) {
         qWarning() << "Error can't access destinaiton node x property";
     }
@@ -126,39 +95,42 @@ void connectSockets(QQuickItem *srcSocket, QQuickItem *destSocket, NodeView *src
         qWarning() << "Error can't access source node y property";
     }
     // Connect node changing with edge updating
-    QObject::connect(srcNodeView, srcNodeX.notifySignal(), edgeView, updatePositionSlot);
-    QObject::connect(srcNodeView, srcNodeY.notifySignal(), edgeView, updatePositionSlot);
-    QObject::connect(destNodeView, destNodeX.notifySignal(), edgeView, updatePositionSlot);
-    QObject::connect(destNodeView, destNodeY.notifySignal(), edgeView, updatePositionSlot);
+    QObject::connect(srcNodeView, srcNodeX.notifySignal(), edgeView,
+                     updatePositionSlot);
+    QObject::connect(srcNodeView, srcNodeY.notifySignal(), edgeView,
+                     updatePositionSlot);
+    QObject::connect(destNodeView, destNodeX.notifySignal(), edgeView,
+                     updatePositionSlot);
+    QObject::connect(destNodeView, destNodeY.notifySignal(), edgeView,
+                     updatePositionSlot);
 }
 
-void EdgeView::invalidate()
-{
+void EdgeView::invalidate() {
     if (!edge()->src() || !edge()->dest()) return;
     auto from = edge()->src();
     auto to = edge()->dest();
     auto srcNodeView = from->node()->view();
     auto destNodeView = to->node()->view();
-    int srcSocketIndex = from->node()->outputs().indexOf(from->node()->output(from->id()));;
-    int destSocketIndex = to->node()->inputs().indexOf(to->node()->input(to->id()));
+    int srcSocketIndex =
+        from->node()->outputs().indexOf(from->node()->output(from->id()));
+    ;
+    int destSocketIndex =
+        to->node()->inputs().indexOf(to->node()->input(to->id()));
     auto srcSocket = srcNodeView->getOutputSocket(srcSocketIndex);
     auto destSocket = destNodeView->getInputSocket(destSocketIndex);
     connectSockets(srcSocket, destSocket, srcNodeView, destNodeView, this);
     updatePosition();
 }
 
-QPointF EdgeView::getSourceSocketCenter()
-{
+QPointF EdgeView::getSourceSocketCenter() {
     return m_srcSocket != nullptr ? calcSocketCenter(m_srcSocket) : QPointF();
 }
 
-QPointF EdgeView::getDestinationSocketCenter()
-{
+QPointF EdgeView::getDestinationSocketCenter() {
     return m_destSocket != nullptr ? calcSocketCenter(m_destSocket) : QPointF();
 }
 
-void EdgeView::updateControlPoints()
-{
+void EdgeView::updateControlPoints() {
     auto src = m_position.start;
     auto dest = m_position.end;
     auto srcX = src.x();
@@ -166,7 +138,7 @@ void EdgeView::updateControlPoints()
     if (srcX > destX) {
         auto dx = srcX - destX;
         m_position.control1 = QPointF(dx + srcX, src.y());
-        m_position.control2 = QPointF(destX-dx, dest.y());
+        m_position.control2 = QPointF(destX - dx, dest.y());
     } else {
         auto sum = srcX + destX;
         m_position.control1 = QPointF(sum / 2, src.y());
@@ -175,8 +147,7 @@ void EdgeView::updateControlPoints()
     emit this->controlPointsChanged();
 }
 
-void EdgeView::updatePosition()
-{
+void EdgeView::updatePosition() {
     if (m_graphView == nullptr) return;
     QPointF globalSrcsocketPoint = getSourceSocketCenter();
     QPointF newSrcPoint = m_graphView->mapFromGlobal(globalSrcsocketPoint);
@@ -186,5 +157,5 @@ void EdgeView::updatePosition()
     setDestPoint(newDestPoint);
 }
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi

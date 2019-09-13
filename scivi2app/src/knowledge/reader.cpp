@@ -1,15 +1,14 @@
 #include "reader.h"
 
-#include <QFile>
-#include <QString>
 #include <QByteArray>
-#include <QJsonDocument>
 #include <QDebug>
+#include <QFile>
+#include <QJsonDocument>
+#include <QString>
 #include "ont/ontology.h"
 #include "utils/path.h"
 
-QSharedPointer<ont::Ontology> Reader::readFromFile(QString path)
-{
+QSharedPointer<ont::Ontology> Reader::readFromFile(QString path) {
     path = PathUtils::removeSchema(path);
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {

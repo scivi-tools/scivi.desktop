@@ -4,13 +4,12 @@
 #include <QSharedPointer>
 
 namespace ont {
-    struct Ontology;
+struct Ontology;
 }
 
-class Reader
-{
+class Reader {
 public:
     static QSharedPointer<ont::Ontology> readFromFile(QString filename);
 };
 
-#endif // READER_H
+#endif  // READER_H

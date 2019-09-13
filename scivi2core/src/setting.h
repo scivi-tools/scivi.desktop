@@ -2,22 +2,23 @@
 #define SETTING_H
 
 #include <QObject>
-#include <QVariant>
 #include <QQmlComponent>
 #include <QSharedPointer>
+#include <QVariant>
 
 namespace scivi {
 namespace diagram {
 
-class Setting: public QObject
-{
+class Setting : public QObject {
     Q_OBJECT
     Q_DISABLE_COPY(Setting)
     Q_PROPERTY(QString name READ name FINAL)
     Q_PROPERTY(QVariant value READ value NOTIFY valueChanged)
 
 public:
-    explicit Setting(const int &id, const QString &name, QVariant &value, QSharedPointer<QQmlComponent> &component, QObject *parent = nullptr);
+    explicit Setting(const int &id, const QString &name, QVariant &value,
+                     QSharedPointer<QQmlComponent> &component,
+                     QObject *parent = nullptr);
     QString name() const;
     QVariant value() const;
     int id() const;
@@ -34,9 +35,9 @@ private:
     QSharedPointer<QQmlComponent> m_component;
 };
 
-QMap<QString, QVariant> toMap(QList<QSharedPointer<Setting> > settings);
+QMap<QString, QVariant> toMap(QList<QSharedPointer<Setting>> settings);
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi
 
-#endif // SETTING_H
+#endif  // SETTING_H

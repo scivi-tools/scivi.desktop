@@ -3,25 +3,22 @@
 namespace scivi {
 namespace palette {
 
-PaletteModel::PaletteModel(QObject *parent) : QStandardItemModel(parent)
-{
+PaletteModel::PaletteModel(QObject *parent) : QStandardItemModel(parent) {
     m_roleNameMapping[NameRole] = "name_role";
     m_roleNameMapping[IdRole] = "id_role";
 }
 
-QHash<int, QByteArray> PaletteModel::roleNames() const
-{
+QHash<int, QByteArray> PaletteModel::roleNames() const {
     return m_roleNameMapping;
 }
 
-int PaletteModel::getId(QModelIndex index)
-{
+int PaletteModel::getId(QModelIndex index) {
     auto idRole = index.data(IdRole);
     return idRole.toInt();
 }
 
-void PaletteModel::buildTree(QStandardItem *current, QList<PaletteItem*> children)
-{
+void PaletteModel::buildTree(QStandardItem *current,
+                             QList<PaletteItem *> children) {
     if (children.isEmpty()) return;
     foreach (auto child, children) {
         auto childItem = new QStandardItem(child->name());
@@ -31,10 +28,9 @@ void PaletteModel::buildTree(QStandardItem *current, QList<PaletteItem*> childre
     }
 }
 
-void PaletteModel::setupModel(QList<PaletteItem *> items)
-{
+void PaletteModel::setupModel(QList<PaletteItem *> items) {
     clear();
-    foreach(auto item, items) {
+    foreach (auto item, items) {
         auto parentItem = new QStandardItem(item->name());
         this->appendRow(parentItem);
         buildTree(parentItem, item->children());
@@ -42,6 +38,5 @@ void PaletteModel::setupModel(QList<PaletteItem *> items)
     m_paletteItems = items;
 }
 
-
-}
-}
+}  // namespace palette
+}  // namespace scivi

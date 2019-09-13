@@ -1,11 +1,11 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-#include <QObject>
-#include <QQmlComponent>
-#include <QPointer>
-#include <QSharedPointer>
 #include <QColor>
+#include <QObject>
+#include <QPointer>
+#include <QQmlComponent>
+#include <QSharedPointer>
 
 namespace scivi {
 namespace diagram {
@@ -15,14 +15,13 @@ class NodeSocket;
 
 using SharedNodeSocket = QSharedPointer<NodeSocket>;
 
-class Edge : public QObject
-{
+class Edge : public QObject {
     Q_OBJECT
     Q_DISABLE_COPY(Edge)
     Q_PROPERTY(int number READ number WRITE setNumber NOTIFY numberChanged)
     Q_PROPERTY(QColor color READ color CONSTANT FINAL)
-    Q_PROPERTY(NodeSocket* src READ src NOTIFY srcChanged)
-    Q_PROPERTY(NodeSocket* dest READ dest NOTIFY destChanged)
+    Q_PROPERTY(NodeSocket *src READ src NOTIFY srcChanged)
+    Q_PROPERTY(NodeSocket *dest READ dest NOTIFY destChanged)
 
 public:
     friend class EdgeView;
@@ -54,8 +53,8 @@ private:
     QPointer<EdgeView> m_view;
 };
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi
 QML_DECLARE_TYPE(scivi::diagram::Edge)
 
-#endif // EDGE_H
+#endif  // EDGE_H

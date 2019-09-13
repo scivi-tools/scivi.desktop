@@ -10,8 +10,7 @@ namespace knowledge {
 
 class Concept;
 
-class Ontology
-{
+class Ontology {
 public:
     Ontology(QList<Concept*> concepts, QList<RelationTriplet> triplets);
     QList<Concept*> concepts();
@@ -22,8 +21,8 @@ private:
     QList<RelationTriplet> m_triplets;
 };
 
-}
+}  // namespace knowledge
 
-}
+}  // namespace scivi
 
-#endif // ONTOLOGY_H
+#endif  // ONTOLOGY_H

@@ -12,12 +12,11 @@ namespace scivi {
 
 namespace palette {
 
-class PaletteBuilder
-{
+class PaletteBuilder {
 public:
     PaletteBuilder(KnowledgeService *knowledgeService);
 
-    QList<PaletteItem*> fromConcepts(QList<Concept*> concepts);
+    QList<PaletteItem *> fromConcepts(QList<Concept *> concepts);
 
 private:
     KnowledgeService *m_knowledgeService;
@@ -25,7 +24,7 @@ private:
     void buildItem(PaletteItem *current, Concept *concept);
 };
 
-}
-}
+}  // namespace palette
+}  // namespace scivi
 
-#endif // PALETTEBUILDER_H
+#endif  // PALETTEBUILDER_H

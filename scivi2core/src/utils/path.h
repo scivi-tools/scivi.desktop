@@ -1,8 +1,8 @@
 #ifndef PATH_H
 #define PATH_H
 
-#include <QString>
 #include <QRegularExpression>
+#include <QString>
 
 namespace PathUtils {
 
@@ -16,6 +16,6 @@ static QString removeSchema(const QString &url) {
     return res;
 }
 
-}
+}  // namespace PathUtils
 
-#endif // PATH_H
+#endif  // PATH_H

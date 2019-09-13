@@ -1,10 +1,10 @@
 #ifndef TYPESSTORE_H
 #define TYPESSTORE_H
 
-#include <QString>
 #include <QColor>
 #include <QList>
 #include <QQmlComponent>
+#include <QString>
 
 #include "knowledge/knowledgeservice.h"
 
@@ -14,8 +14,7 @@ struct Type {
     QString component;
 };
 
-class TypesStore
-{
+class TypesStore {
 public:
     TypesStore();
     TypesStore(scivi::knowledge::KnowledgeService *service, QQmlEngine *engine);
@@ -27,4 +26,4 @@ private:
     QMap<QString, QSharedPointer<QQmlComponent>> m_components;
 };
 
-#endif // TYPESSTORE_H
+#endif  // TYPESSTORE_H

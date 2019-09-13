@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QQuickItem>
 #include <QPointF>
+#include <QQuickItem>
 
 namespace scivi {
 namespace widget {
@@ -11,8 +11,9 @@ const auto zoomMin = 0.1f;
 
 class ZoomPanView : public QQuickItem {
     Q_OBJECT
-    Q_PROPERTY(QQuickItem* innerView READ innerView NOTIFY innerViewChanged)
-    Q_PROPERTY(bool panEnabled READ panEnabled WRITE setPanEnabled NOTIFY panEnableChanged)
+    Q_PROPERTY(QQuickItem *innerView READ innerView NOTIFY innerViewChanged)
+    Q_PROPERTY(bool panEnabled READ panEnabled WRITE setPanEnabled NOTIFY
+                   panEnableChanged)
 
 public:
     explicit ZoomPanView(QQuickItem *parent = nullptr);
@@ -33,12 +34,11 @@ private:
 
     // QQuickItem interface
 protected:
-
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
     virtual void mouseReleaseEvent(QMouseEvent *event) override;
     virtual void wheelEvent(QWheelEvent *event) override;
 };
 
-}
-}
+}  // namespace widget
+}  // namespace scivi

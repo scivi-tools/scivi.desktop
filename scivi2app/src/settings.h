@@ -7,12 +7,13 @@
 
 namespace scivi {
 
-class Settings : public QObject
-{
+class Settings : public QObject {
     static Settings *m_instance;
+
 public:
     Settings(const QApplication &app);
-    void fromCommandLineArguments(QCommandLineParser &cmdParser, const QStringList &arguments);
+    void fromCommandLineArguments(QCommandLineParser &cmdParser,
+                                  const QStringList &arguments);
 
     QString filtersDir;
     QString pluginsDir;
@@ -22,6 +23,6 @@ public:
 
 Settings *getSettings();
 
-}
+}  // namespace scivi
 
-#endif // SETTINGS_H
+#endif  // SETTINGS_H

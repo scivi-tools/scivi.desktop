@@ -8,8 +8,7 @@ namespace scivi {
 
 namespace knowledge {
 
-class Concept
-{
+class Concept {
 public:
     Concept(int id, QString name, QVariantMap attributes);
 
@@ -25,8 +24,8 @@ private:
     QVariantMap m_attributes;
 };
 
-}
+}  // namespace knowledge
 
-}
+}  // namespace scivi
 
-#endif // CONCEPT_H
+#endif  // CONCEPT_H

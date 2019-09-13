@@ -1,28 +1,25 @@
 #include "palettefilterproxy.h"
 
-#include <QDebug>
 #include <datanode.h>
+#include <QDebug>
 
-PaletteFilterProxy::PaletteFilterProxy(KnowledgeService *knowledgeService, QObject *parent)
-    : QSortFilterProxyModel(parent), m_knowledgeService(knowledgeService)
-{
+PaletteFilterProxy::PaletteFilterProxy(KnowledgeService *knowledgeService,
+                                       QObject *parent)
+    : QSortFilterProxyModel(parent), m_knowledgeService(knowledgeService) {}
 
-}
-
-void PaletteFilterProxy::setSelectedNode(NodeView *node)
-{
+void PaletteFilterProxy::setSelectedNode(NodeView *node) {
     m_selectedNode = node;
     invalidateFilter();
 }
 
-
-bool PaletteFilterProxy::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
-{
-    return filterAcceptsRowItself(source_row, source_parent) || hasAcceptedChildren(source_row, source_parent);
+bool PaletteFilterProxy::filterAcceptsRow(
+    int source_row, const QModelIndex &source_parent) const {
+    return filterAcceptsRowItself(source_row, source_parent) ||
+           hasAcceptedChildren(source_row, source_parent);
 }
 
-bool PaletteFilterProxy::filterAcceptsRowItself(int source_row, const QModelIndex &source_parent) const
-{
+bool PaletteFilterProxy::filterAcceptsRowItself(
+    int source_row, const QModelIndex &source_parent) const {
     QModelIndex item = sourceModel()->index(source_row, 0, source_parent);
     int conceptId = item.data(Qt::UserRole).toInt();
     if (conceptId == 0) {
@@ -31,9 +28,9 @@ bool PaletteFilterProxy::filterAcceptsRowItself(int source_row, const QModelInde
     return isCompatibleWithSelected(conceptId);
 }
 
-bool PaletteFilterProxy::hasAcceptedChildren(int source_row, const QModelIndex &source_parent) const
-{
-    QModelIndex item = sourceModel()->index(source_row,0,source_parent);
+bool PaletteFilterProxy::hasAcceptedChildren(
+    int source_row, const QModelIndex &source_parent) const {
+    QModelIndex item = sourceModel()->index(source_row, 0, source_parent);
     if (!item.isValid()) {
         return false;
     }
@@ -52,14 +49,15 @@ bool PaletteFilterProxy::hasAcceptedChildren(int source_row, const QModelIndex &
     return false;
 }
 
-bool PaletteFilterProxy::isCompatibleWithSelected(int conceptId) const
-{
+bool PaletteFilterProxy::isCompatibleWithSelected(int conceptId) const {
     if (m_selectedNode == nullptr) {
         return true;
     }
-    DataNode* selectedDataNode = reinterpret_cast<DataNode*>(m_selectedNode->node());
+    DataNode *selectedDataNode =
+        reinterpret_cast<DataNode *>(m_selectedNode->node());
     if (selectedDataNode == nullptr || selectedDataNode->conceptId() == -1) {
         return true;
     }
-    return m_knowledgeService->isCompatible(conceptId, selectedDataNode->conceptId());
+    return m_knowledgeService->isCompatible(conceptId,
+                                            selectedDataNode->conceptId());
 }

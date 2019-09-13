@@ -2,10 +2,10 @@
 #define SETTINGSMODEL_H
 
 #include <QAbstractListModel>
-#include <QPointer>
 #include <QMap>
-#include <QString>
+#include <QPointer>
 #include <QSharedPointer>
+#include <QString>
 
 #include "./setting.h"
 
@@ -13,8 +13,7 @@ namespace scivi {
 
 using namespace diagram;
 
-class SettingsModel : public QAbstractListModel
-{
+class SettingsModel : public QAbstractListModel {
     Q_OBJECT
     Q_DISABLE_COPY(SettingsModel)
 public:
@@ -39,5 +38,5 @@ private:
     QList<QSharedPointer<Setting>> m_settings;
 };
 
-}
-#endif // SETTINGSMODEL_H
+}  // namespace scivi
+#endif  // SETTINGSMODEL_H

@@ -1,25 +1,24 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <QObject>
 #include <QAbstractItemModel>
 #include <QModelIndex>
+#include <QObject>
 #include <QQuickItem>
 #include <QSharedPointer>
 
-#include <nodeview.h>
 #include <edge.h>
+#include <nodeview.h>
 
-#include "knowledge/knowledgeservice.h"
-#include "palette/palettemodel.h"
-#include "palette/palettefilterproxy.h"
-#include "knowledge/knowledgeservice.h"
-#include "graphview.h"
 #include "connectionhandler.h"
+#include "graphview.h"
+#include "knowledge/knowledgeservice.h"
+#include "palette/palettefilterproxy.h"
+#include "palette/palettemodel.h"
 
-#include "typesstore.h"
 #include "interpreter/interpreter.h"
 #include "nodegroup.h"
+#include "typesstore.h"
 
 using namespace scivi::palette;
 using namespace scivi::knowledge;
@@ -29,14 +28,15 @@ namespace scivi {
 
 using SharedDiagram = QSharedPointer<DataflowDiagram>;
 
-class Editor : public QObject
-{
+class Editor : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QObject* paletteModel READ paletteModelProp NOTIFY paletteModelChanged)
+    Q_PROPERTY(
+        QObject *paletteModel READ paletteModelProp NOTIFY paletteModelChanged)
     Q_PROPERTY(bool isConnecting READ isConnecting)
-    Q_PROPERTY(QObject* selection READ selection NOTIFY selectedNodesChanged)
-    Q_PROPERTY(QObject* selectedNode READ selectedNode NOTIFY selectedNodesChanged)
-    Q_PROPERTY(DataflowDiagram* diagram READ diagram)
+    Q_PROPERTY(QObject *selection READ selection NOTIFY selectedNodesChanged)
+    Q_PROPERTY(
+        QObject *selectedNode READ selectedNode NOTIFY selectedNodesChanged)
+    Q_PROPERTY(DataflowDiagram *diagram READ diagram)
     Q_PROPERTY(QString ontPath READ ontPath NOTIFY ontologyLoaded)
     Q_PROPERTY(QString diagramPath READ diagramPath NOTIFY diagramPathChanged)
 
@@ -72,7 +72,7 @@ signals:
     void diagramPathChanged();
     void paletteModelChanged();
     void selectedNodesChanged();
-    void nodeAdded(QObject*);
+    void nodeAdded(QObject *);
 
 private:
     KnowledgeService m_knowledgeService;
@@ -80,7 +80,7 @@ private:
     PaletteFilterProxy m_paletteProxyModel;
     SharedDiagram m_diagram;
     TypesStore m_typesStore;
-    diagram::GraphView *m_graphView = { nullptr };
+    diagram::GraphView *m_graphView = {nullptr};
     NodeGroup m_nodeSelection;
     QSharedPointer<ConnectionHandler> m_connectionHandler;
     QSharedPointer<Interpreter> m_interpreter;
@@ -88,9 +88,9 @@ private:
 
     void buildPalette();
 
-    QQmlEngine* m_engine = { nullptr };
+    QQmlEngine *m_engine = {nullptr};
 };
 
-}
+}  // namespace scivi
 
-#endif // EDITOR_H
+#endif  // EDITOR_H

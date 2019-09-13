@@ -3,10 +3,10 @@
 
 #include <QtCore/qglobal.h>
 
-#if defined (SCIVI_LIBRARY)
+#if defined(SCIVI_LIBRARY)
 #define SCIVI_LIBRARY_EXPORT
 #else
 #define SCIVI_LIBRARY_EXPORT
 #endif
 
-#endif // FILTERINTERFACES_GLOBAL_H
+#endif  // FILTERINTERFACES_GLOBAL_H

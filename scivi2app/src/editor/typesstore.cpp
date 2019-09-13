@@ -2,21 +2,19 @@
 
 #include "knowledge/concept.h"
 
-TypesStore::TypesStore()
-{
+TypesStore::TypesStore() {}
 
-}
-
-TypesStore::TypesStore(scivi::knowledge::KnowledgeService *service, QQmlEngine *engine)
-{
+TypesStore::TypesStore(scivi::knowledge::KnowledgeService *service,
+                       QQmlEngine *engine) {
     auto typeConcept = service->conceptByName("Type");
     auto typesConcepts = service->flatChildrenOf(typeConcept);
-    for (auto &type: typesConcepts) {
+    for (auto &type : typesConcepts) {
         Type newType;
         newType.name = type->name();
         newType.color = QColor((*type)["color"].toString());
         newType.component = (*type)["layout"].toString();
-        QSharedPointer<QQmlComponent> component = QSharedPointer<QQmlComponent>::create(engine);
+        QSharedPointer<QQmlComponent> component =
+            QSharedPointer<QQmlComponent>::create(engine);
         QByteArray data = newType.component.toUtf8();
         component->setData(data, QUrl("dynamicPath"));
 
@@ -26,12 +24,8 @@ TypesStore::TypesStore(scivi::knowledge::KnowledgeService *service, QQmlEngine *
     }
 }
 
-void TypesStore::addType(Type &type)
-{
-    m_types.append(type);
-}
+void TypesStore::addType(Type &type) { m_types.append(type); }
 
-QSharedPointer<QQmlComponent> TypesStore::componentForType(QString typeName)
-{
+QSharedPointer<QQmlComponent> TypesStore::componentForType(QString typeName) {
     return m_components[typeName];
 }

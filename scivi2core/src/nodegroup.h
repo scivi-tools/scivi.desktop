@@ -8,8 +8,7 @@ namespace diagram {
 
 class NodeView;
 
-class NodeGroup : public QObject
-{
+class NodeGroup : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY changed)
     Q_PROPERTY(bool isMulti READ isMulti NOTIFY changed)
@@ -20,11 +19,11 @@ public:
     bool isNodeSelected(NodeView *nodeView) const;
     void clear();
     void remove(NodeView *nodeView);
-    NodeView* at(int index) const;
+    NodeView *at(int index) const;
     bool isMulti() const;
     bool isEmpty() const;
     void add(NodeView *nodeView);
-    QList<NodeView*> nodes() const;
+    QList<NodeView *> nodes() const;
 
 signals:
     void changed();
@@ -32,10 +31,10 @@ signals:
     void removed(NodeView *nodeView);
 
 private:
-    QList<NodeView*> m_nodes;
+    QList<NodeView *> m_nodes;
 };
 
-}
-}
+}  // namespace diagram
+}  // namespace scivi
 
-#endif // NODEGROUP_H
+#endif  // NODEGROUP_H

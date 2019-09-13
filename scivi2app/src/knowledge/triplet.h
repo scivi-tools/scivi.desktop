@@ -5,7 +5,7 @@ namespace scivi {
 
 namespace knowledge {
 
-template<typename T1, typename T2, typename T3>
+template <typename T1, typename T2, typename T3>
 struct Triplet {
     T1 first;
     T2 second;
@@ -21,7 +21,7 @@ struct Triplet {
 class Concept;
 using RelationTriplet = Triplet<Concept*, int, Concept*>;
 
-}
-}
+}  // namespace knowledge
+}  // namespace scivi
 
-#endif // TRIPLET_H
+#endif  // TRIPLET_H

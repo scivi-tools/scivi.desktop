@@ -2,28 +2,21 @@
 
 namespace scivi {
 
-SettingsModel::SettingsModel(QObject* parent):
-    QAbstractListModel(parent)
-{
-}
+SettingsModel::SettingsModel(QObject *parent) : QAbstractListModel(parent) {}
 
-void SettingsModel::setSettings(QList<QSharedPointer<Setting>> &settings)
-{
+void SettingsModel::setSettings(QList<QSharedPointer<Setting>> &settings) {
     beginResetModel();
     m_settings = settings;
     endResetModel();
 }
 
-int SettingsModel::rowCount(const QModelIndex &parent) const
-{
+int SettingsModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return m_settings.size();
 }
 
-QVariant SettingsModel::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
+QVariant SettingsModel::data(const QModelIndex &index, int role) const {
+    if (!index.isValid()) return QVariant();
     auto setting = m_settings[index.row()];
     if (role == NameRole)
         return setting->name();
@@ -37,8 +30,7 @@ QVariant SettingsModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QHash<int, QByteArray> SettingsModel::roleNames() const
-{
+QHash<int, QByteArray> SettingsModel::roleNames() const {
     QHash<int, QByteArray> roles;
     roles[NameRole] = "name";
     roles[ComponentRole] = "fieldComponent";
@@ -46,8 +38,7 @@ QHash<int, QByteArray> SettingsModel::roleNames() const
     return roles;
 }
 
-bool SettingsModel::setData(int row, int column, const QVariant &data)
-{
+bool SettingsModel::setData(int row, int column, const QVariant &data) {
     if (column == 1) {
         m_settings[row]->setValue(data);
         emit dataChanged(index(row), index(row));
@@ -56,8 +47,7 @@ bool SettingsModel::setData(int row, int column, const QVariant &data)
     return true;
 }
 
-bool SettingsModel::saveValue(QString name, const QVariant &data)
-{
+bool SettingsModel::saveValue(QString name, const QVariant &data) {
     int row = 0;
     for (int i = 0; i < m_settings.size(); i++) {
         if (m_settings[i]->name() == name) {
@@ -71,6 +61,4 @@ bool SettingsModel::saveValue(QString name, const QVariant &data)
     return false;
 }
 
-
-
-}
+}  // namespace scivi
