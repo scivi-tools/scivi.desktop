@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QtCreatorProject>
+<!-- Written by QtCreator 4.8.0, 2019-02-25T23:21:21. -->
+<qtcreator>
+ <data>
+  <variable>ProjectExplorer.Project.Target.0</variable>
+  <valuemap type="QVariantMap">
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges">
+     <value type="QString">PYTHONQT_STATIC=true</value>
+    </valuelist>
+   </valuemap>
+  </valuemap>
+ </data>
+ <data>
+  <variable>Version</variable>
+  <value type="int">20</value>
+ </data>
+</qtcreator>
