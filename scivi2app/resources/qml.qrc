@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/">
+        <file>EdgeDelegate.qml</file>
+        <file>EditorPage.qml</file>
+        <file>main.qml</file>
+        <file>NodeDelegate.qml</file>
+        <file>NodeInspector.qml</file>
+        <file>Palette.qml</file>
+        <file>Parameter.qml</file>
+        <file>Socket.qml</file>
+        <file>VisualizationPage.qml</file>
+        <file>icons/add_black.png</file>
+        <file>icons/delete_black.png</file>
+        <file>icons/ic_folder_open_black_48dp.png</file>
+        <file>icons/ic_insert_drive_file_black_48dp.png</file>
+        <file>icons/play_black.png</file>
+        <file>icons/save_black.png</file>
+        <file>icons/scivi_logo_website.png</file>
+        <file>icons/settings_black.png</file>
+        <file>+touch/EditorPage.qml</file>
+        <file>+touch/FilePicker.qml</file>
+        <file>+touch/FileSelectionPage.qml</file>
+        <file>+touch/HomeForm.qml</file>
+        <file>+touch/main.qml</file>
+        <file>+touch/NodeSettingsPage.qml</file>
+        <file>+touch/PalettePage.qml</file>
+        <file>+touch/TitleToolbar.qml</file>
+        <file>+touch/utils.js</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>ClosableTabButton.qml</file>
+    </qresource>
+</RCC>
