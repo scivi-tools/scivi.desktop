@@ -18,6 +18,7 @@ PluginManager::PluginManager(Editor *editor, QQmlEngine *engine,
 }
 
 void PluginManager::initialize(QDir baseDir) {
+    m_engine->addImportPath(baseDir.path());
     const auto plugins = findPluginsInDir(baseDir);
     for (const auto &plugin : plugins) {
         registerPlugin(plugin, baseDir.path());
